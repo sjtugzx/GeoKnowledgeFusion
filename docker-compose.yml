@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  worker:
+    scale: 1
+    image: "${PROJECT_IMAGE:-tablefusion-async:latest}"
+    command: celery -A tablefusion_async.main.app worker --loglevel=INFO
+    restart: unless-stopped
+    network_mode: bridge
+    healthcheck:
+      interval: 1m
+      timeout: 3s
+      retries: 3
+      test: celery -A tablefusion_async.main.app inspect ping
+    environment:
+      - TZ=Asia/Shanghai
+      - PROJECT_ENV=${PROJECT_ENV:-LOCAL}
