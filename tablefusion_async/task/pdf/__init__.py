@@ -1,11 +1,10 @@
 import io
-import os
 import time
-import json
-import base64
+# import json
+# import base64
 import logging
-from tempfile import TemporaryDirectory, TemporaryFile
-from pathlib import Path
+# from tempfile import TemporaryDirectory, TemporaryFile
+# from pathlib import Path
 
 import fitz
 from PIL import Image
