@@ -118,12 +118,12 @@ def fitz_image(
         imgs = []
         for i in range(pagenumber):
             page = doc[i]
-            pix = page.getPixmap()
+            pix = page.get_pixmap()
             pdfheight = pix.height
             pdfwidth = pix.width
             pdfzoom = min(density / pdfheight, density / pdfwidth)
-            mat = fitz.Matrix(pdfzoom, pdfzoom).preRotate(0)
-            pix = page.getPixmap(matrix=mat, alpha=False)
+            mat = fitz.Matrix(pdfzoom, pdfzoom).prerotate(0)
+            pix = page.get_pixmap(matrix=mat, alpha=False)
             pix = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
             imgs.append(pix)
     except Exception as e:
