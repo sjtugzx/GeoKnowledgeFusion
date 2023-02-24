@@ -1,0 +1,66 @@
+stages:
+  - build
+  - deploy:dev
+  - deploy:prod
+
+
+build-docker-image:
+  stage:
+    build
+  tags:
+    - docker
+  script:
+    - sudo docker build --rm -t $CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8} .
+    - sudo docker tag $CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8} reg.acemap.cn/dde/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}
+    - sudo docker push reg.acemap.cn/dde/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}
+  only:
+    - develop
+    - master
+
+
+deploy_develop:
+  #  when: manual
+  stage:
+    deploy:dev
+  tags:
+    - docker
+  script:
+    - rsync -e "ssh -p 22" ./docker-compose.yml acemap@10.10.10.225:$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/
+    - ssh -p 22 acemap@10.10.10.225
+      "echo \"\" >$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      echo -e \"PROJECT_IMAGE=reg.acemap.cn/dde/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}\" >>$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      echo -e \"PROJECT_ENV=DEV\" >>$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      cd $DEV_COMPOSE_ROOT/$CI_PROJECT_NAME;
+      sudo docker-compose -p $CI_PROJECT_NAME up -d"
+  only:
+    - develop
+
+
+deploy_prod:
+  when: manual
+  stage:
+    deploy:prod
+  tags:
+    - docker
+  script:
+    #    - rsync -e "ssh -p $MDL_SERVER_PORT" ./docker-compose.yml $MDL_USER@$MDL_SERVER_HOST:$MDL_COMPOSE_ROOT/$CI_PROJECT_NAME/
+    #    - ssh -p $MDL_SERVER_PORT $MDL_USER@$MDL_SERVER_HOST
+    #      "echo \"\" >$MDL_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+    #      echo -e \"PROJECT_IMAGE=reg.acemap.cn:8443/dde/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}\" >>$MDL_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+    #      echo -e \"PROJECT_ENV=HK\" >>$MDL_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+    #      cd $MDL_COMPOSE_ROOT/$CI_PROJECT_NAME;
+    #      sudo docker-compose -p $CI_PROJECT_NAME up -d"
+    - sudo docker save $CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8} > /var/lib/gitlab-runner/images/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}
+    - rsync -e "ssh -p $KE_SERVER_PORT" -avz  ./docker-compose.yml  /var/lib/gitlab-runner/images/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8} $KE_USER@$KE_SERVER_HOST:$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/
+    - rm -f /var/lib/gitlab-runner/images/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}
+    - ssh -p $KE_SERVER_PORT $KE_USER@$KE_SERVER_HOST
+      "echo \"\" >$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      echo -e \"PROJECT_IMAGE=$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}\" >>$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      echo -e \"PROJECT_ENV=HK\" >>$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      cd $KE_COMPOSE_ROOT/$CI_PROJECT_NAME;
+      sudo docker load < $KE_COMPOSE_ROOT/$CI_PROJECT_NAME/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8};
+      rm -f $KE_COMPOSE_ROOT/$CI_PROJECT_NAME/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8};
+      sudo docker-compose -p $CI_PROJECT_NAME up -d"
+
+  only:
+    - master
