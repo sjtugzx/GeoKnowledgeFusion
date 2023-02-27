@@ -10,13 +10,13 @@ logger = logging.getLogger(__name__)
 class PdfContentTypeEnum(str, Enum):
     PDF = 'pdf'
     GROBID_TEXT = 'grobid_text'
-    SCIENCEPARSE_TEXT = 'scienceparse_text'
+    # SCIENCEPARSE_TEXT = 'scienceparse_text'
     PDF2IMAGE_IMAGE = 'pdf2image_image'
-    PDFFIGURES2_IMAGE = 'pdffigures2_image'
-    PDFFIGURES2_IMAGE_META = 'pdffigures2_image_meta'
-    PDFFIGURES2_TEXT = 'pdffigures2_text'
-    PDFMINER_TEXT = 'pdfminer_text'
-    TEXT = 'text'
+    # PDFFIGURES2_IMAGE = 'pdffigures2_image'
+    # PDFFIGURES2_IMAGE_META = 'pdffigures2_image_meta'
+    # PDFFIGURES2_TEXT = 'pdffigures2_text'
+    # PDFMINER_TEXT = 'pdfminer_text'
+    # TEXT = 'text'
 
 
 def save_pdf_content(

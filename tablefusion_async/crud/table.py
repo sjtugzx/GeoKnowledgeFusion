@@ -71,7 +71,8 @@ def save_outline(
             final_outer_line_x1,final_outer_line_y1,final_outer_line_x2,final_outer_line_y2,
             table_direction,confirmed,raw_inner_line,final_inner_line,auto_thres,inner_line_confirmed ,
             inner_line_change_flag,table_type,ocr_flag,raw_cell2content,
-            final_cell2content,content_change_flag,cell_operation) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,"","",0,0,"0","unchecked","unchecked","","","0","")
+            final_cell2content,content_change_flag,cell_operation) VALUES 
+            (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,"","",0,0,"0","unchecked","unchecked","","","0","")
             ON DUPLICATE KEY UPDATE 
             final_outer_line_x1=VALUES(final_outer_line_x1),
             final_outer_line_y1=VALUES(final_outer_line_y1),
