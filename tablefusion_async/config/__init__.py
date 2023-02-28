@@ -35,10 +35,10 @@ CHUNK_SIZE = 1024 * 1024
 TIMEDELTA = datetime.timedelta(hours=8)
 
 # Base Urls
-IMG_BASE_URL = '/api/v1/img'
-SEARCH_RESULT_BASE_URL = '/api/v1/file/search_result'
-PDF_IMAGE_BASE_URL = '/api/v1/file/pdf_img'
-PDF_PARSE_RESULT_BASE_URL = '/api/v1/file/text_result'
+IMG_BASE_URL = '/api/v2/img'
+# SEARCH_RESULT_BASE_URL = '/api/v1/file/search_result'
+# PDF_IMAGE_BASE_URL = '/api/v1/file/pdf_img'
+# PDF_PARSE_RESULT_BASE_URL = '/api/v1/file/text_result'
 
 # Email Sending
 EMAIL = {

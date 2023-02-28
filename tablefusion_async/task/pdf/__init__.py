@@ -1,4 +1,5 @@
 import io
+import os
 import time
 # import json
 # import base64
@@ -35,6 +36,7 @@ def grobid_text(
         **kwargs,
 ) -> str:
     DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
+    user_id = kwargs["user_id"] if kwargs and "user_id" in kwargs else None
     existing_content = crud.pdf.get_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.GROBID_TEXT, DB=DB).get(0, b'')
     if not reset and len(existing_content) >= 300:  # 确定已有结果且不是之前写入的empty result
         return 'Result exists. Task skip'
@@ -84,6 +86,7 @@ def grobid_text(
 
     try:
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.GROBID_TEXT, {0: content}, DB=DB)
+        crud.meta.save_paper_meta_to_mysql_from_grobid_text(content, paper_id, user_id)
     except Exception:
         logger.error(f"Could not write out result for {crud.pdf.PdfContentTypeEnum.GROBID_TEXT.value} paper {paper_id}")
         raise TaskFailure(

@@ -32,14 +32,14 @@ def get_conn_cursor(db, cursor_type=Cursor):
         connection.close()
 
 
-def mysql_select(sql, *params, db='dde_deepdive', cursor_type=Cursor):
+def mysql_select(sql, *params, db='dde_table_fusion', cursor_type=Cursor):
     with get_conn_cursor(db, cursor_type) as (connection, cursor):
         cursor.execute(sql, params)
         results = cursor.fetchall()
     return results
 
 
-def mysql_execute(sql, *params, db='dde_deepdive') -> int:  # 返回last row id
+def mysql_execute(sql, *params, db='dde_table_fusion') -> int:  # 返回last row id
     with get_conn_cursor(db) as (connection, cursor):
         try:
             cursor.execute(sql, params)
@@ -50,7 +50,7 @@ def mysql_execute(sql, *params, db='dde_deepdive') -> int:  # 返回last row id
             raise e
 
 
-def mysql_executemany(sql, params_list, db='dde_deepdive') -> int:  # 返回last row id
+def mysql_executemany(sql, params_list, db='dde_table_fusion') -> int:  # 返回last row id
     with get_conn_cursor(db) as (connection, cursor):
         try:
             cursor.executemany(sql, params_list)
