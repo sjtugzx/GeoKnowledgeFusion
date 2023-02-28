@@ -120,7 +120,7 @@ def save_paper_meta_to_mysql_from_grobid_text(grobid_content, paper_id, user_id)
     sql = """
          INSERT INTO meta (pdf_md5, title, abstract, `year`, author, journal, issn, volume, issue, first_page,
          last_page, doi, link, pdf_link, publisher, `language`, last_edit_user_id)
-         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+         VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
          ON DUPLICATE KEY UPDATE title=VALUES(title), abstract=VALUES(abstract), `year`=VALUES(year), 
          author=VALUES(author), journal=VALUES(journal), issn=VALUES(issn), volume=VALUES(volume),
          issue=VALUES(issue), first_page=VALUES(first_page), last_page=VALUES(last_page), doi=VALUES(doi), 
@@ -131,3 +131,7 @@ def save_paper_meta_to_mysql_from_grobid_text(grobid_content, paper_id, user_id)
                      info["volume"], info["issue"], info["first_page"], info["last_page"],
                      info["doi"], info["link"], info["pdf_link"], info["publisher"],
                      info["language"], user_id)
+
+    sql2 = "UPDATE `paper_list` SET display_name = %s WHERE pdf_md5 = %s;"
+    db.mysql_execute(sql2, info["title"], paper_id)
+

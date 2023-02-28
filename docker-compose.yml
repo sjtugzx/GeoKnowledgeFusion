@@ -11,6 +11,8 @@ services:
       timeout: 3s
       retries: 3
       test: celery -A tablefusion_async.main.app inspect ping
+    volumes:
+      - "${PROJECT_STATIC_DIR:-./tablefusion_async/static}:/tablefusoin-async/tablefusion_async/static"
     environment:
       - TZ=Asia/Shanghai
       - PROJECT_ENV=${PROJECT_ENV:-LOCAL}

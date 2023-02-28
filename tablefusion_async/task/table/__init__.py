@@ -62,3 +62,25 @@ def outline_detect(
         raise TaskFailure(f"Could not write out result for table_outlines of paper {paper_id}")
 
     return f'table_outlines have been extracted and saved'
+
+
+"""
+要用到pdf文件，修改docker配置，添加挂载
+"""
+
+
+@app.task(bind=True, base=BaseTask, time_limit=180)
+def inner_detect(
+        self,
+        paper_id: str,
+        content_id: int = 0,
+        *args,
+        reset: bool = False,
+        **kwargs,
+) -> str:
+    DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
+    table_ids = crud.table.get_inner(paper_id)
+    for table_id in table_ids:
+        meta = crud.table.get_and_set_table_meta(paper_id, table_id)
+
+    return ""

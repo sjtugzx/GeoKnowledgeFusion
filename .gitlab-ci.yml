@@ -30,6 +30,7 @@ deploy_develop:
       "echo \"\" >$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
       echo -e \"PROJECT_IMAGE=reg.acemap.cn/dde/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}\" >>$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
       echo -e \"PROJECT_ENV=DEV\" >>$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      echo -e \"PROJECT_STATIC_DIR=/data/tablefusion/static\" >>$DEV_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
       cd $DEV_COMPOSE_ROOT/$CI_PROJECT_NAME;
       sudo docker-compose -p $CI_PROJECT_NAME up -d"
   only:
@@ -57,6 +58,7 @@ deploy_prod:
       "echo \"\" >$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
       echo -e \"PROJECT_IMAGE=$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8}\" >>$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
       echo -e \"PROJECT_ENV=HK\" >>$KE_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
+      echo -e \"PROJECT_STATIC_DIR=/data/tablefusion/static\" >>$PRD_COMPOSE_ROOT/$CI_PROJECT_NAME/.env;
       cd $KE_COMPOSE_ROOT/$CI_PROJECT_NAME;
       sudo docker load < $KE_COMPOSE_ROOT/$CI_PROJECT_NAME/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8};
       rm -f $KE_COMPOSE_ROOT/$CI_PROJECT_NAME/$CI_PROJECT_NAME:${CI_COMMIT_SHA:0:8};

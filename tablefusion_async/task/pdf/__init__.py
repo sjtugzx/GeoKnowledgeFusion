@@ -85,10 +85,11 @@ def grobid_text(
         time.sleep(3)
 
     try:
+        print("save_pdf_content:")
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.GROBID_TEXT, {0: content}, DB=DB)
+        print("save_paper_meta_to_mysql_from_grobid_text:")
         crud.meta.save_paper_meta_to_mysql_from_grobid_text(content, paper_id, user_id)
     except Exception:
-        logger.error(f"Could not write out result for {crud.pdf.PdfContentTypeEnum.GROBID_TEXT.value} paper {paper_id}")
         raise TaskFailure(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.GROBID_TEXT.value} paper {paper_id}")
 
