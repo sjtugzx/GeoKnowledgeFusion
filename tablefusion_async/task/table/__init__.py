@@ -66,6 +66,7 @@ def outline_detect(
 
 """
 要用到pdf文件，修改docker配置，添加挂载
+inner_detect 获取表格内框线，表格内容文本
 """
 
 
@@ -79,8 +80,41 @@ def inner_detect(
         **kwargs,
 ) -> str:
     DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
+
+    # 求外框线内的相对坐标a,b,c,d，在整个pdf中的相对位置，注意外框要加上旋转才是真正进行计算的pdf（生成了旋转的pdf）中外框的位置
+    def get_trans_rec(x1, y1, x2, y2, outline):
+        area = crud.table.get_area_direction(outline.direction.value, [outline.x1, outline.y1, outline.x2, outline.y2])
+        width = area[2] - area[0]
+        height = area[3] - area[1]
+        return [area[0] + x1 * width, area[1] + y1 * height, area[0] + x2 * width, area[1] + y2 * height]
+
     table_ids = crud.table.get_inner(paper_id)
     for table_id in table_ids:
         meta = crud.table.get_and_set_table_meta(paper_id, table_id)
+        page = meta["page"]
+        pdfpath = meta["pdfpath"]
+        xmlpath = meta["xmlpath"]
+        structure = crud.table.detect_table_structure(paper_id, meta)
+        if crud.table.save_table_structure(paper_id, table_id, structure, 0):
+            raise TaskFailure(f"表格内结构保存错误 {paper_id}")
+        print(f'table_inner have been extracted and saved')
 
-    return ""
+        table = await crud.table.get_table(paper_id, table_id)
+        areas = []
+        for row in structure.cells:
+            for col in row:
+                areas.append(
+                    get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
+                                  structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
+                )
+        texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
+        excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
+
+        table.content.excel_path = excel_path
+        table.content.text = texts
+        table.content.confirmed = False
+        if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
+            raise TaskFailure(f"表格内容保存错误 {paper_id}")
+        print(f'table_content have been extracted and saved')
+
+    return f'table_inner and table_content have been extracted and saved'

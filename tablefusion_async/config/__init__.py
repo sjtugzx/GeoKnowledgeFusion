@@ -34,6 +34,11 @@ CHUNK_SIZE = 1024 * 1024
 # UTC bias
 TIMEDELTA = datetime.timedelta(hours=8)
 
+PDF_DIR = os.path.join(PROJECT_ROOT, 'static/upload/pdf')
+PDF_PROCESS_DIR = os.path.join(PROJECT_ROOT, 'static/processed/pdf')
+PDF_XML_DIR = os.path.join(PROJECT_ROOT, 'static/processed/xml')
+TABLE_CONTENT_FILE_DIR = os.path.join(PROJECT_ROOT, 'static/processed/table/content')
+
 # Base Urls
 IMG_BASE_URL = '/api/v2/img'
 # SEARCH_RESULT_BASE_URL = '/api/v1/file/search_result'

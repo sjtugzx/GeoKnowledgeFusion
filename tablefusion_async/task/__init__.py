@@ -7,6 +7,5 @@
 #         module = f'{__name__}.{name}'
 #         importlib.import_module(module)
 
-from . import pdf
-# from . import text
-from . import table
+from . import pdf  # text image
+from . import table  # 表格框线和内容

@@ -3,4 +3,5 @@ from . import (
     meta,
     text,
     table,
+    model
 )
