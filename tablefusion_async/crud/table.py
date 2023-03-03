@@ -99,7 +99,7 @@ def get_table(
             FROM `table` WHERE pdf_md5 = %s  AND table_id =%s
         '''
 
-    ret = await db.mysql_select(sql, paper_id, table_id, cursor_type=db.DictCursor)
+    ret = db.mysql_select(sql, paper_id, table_id, cursor_type=db.DictCursor)
     # logger.info(ret)
     if len(ret) == 0:
         return None

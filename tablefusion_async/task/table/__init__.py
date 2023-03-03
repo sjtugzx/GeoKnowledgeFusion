@@ -99,7 +99,7 @@ def inner_detect(
             raise TaskFailure(f"表格内结构保存错误 {paper_id}")
         print(f'table_inner have been extracted and saved')
 
-        table = await crud.table.get_table(paper_id, table_id)
+        table = crud.table.get_table(paper_id, table_id)
         areas = []
         for row in structure.cells:
             for col in row:
