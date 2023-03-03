@@ -1225,7 +1225,7 @@ def save_table_structure(
         '''
     else:
         sql = '''
-                    UPDATE `table` SET final_inner_line= %s  ,update_at =%s  
+                    UPDATE `table` SET raw_inner_line= %s  ,update_at =%s  
                     WHERE pdf_md5 = %s AND table_id = %s
                 '''
     db.mysql_execute(sql, table_structure.json(), dt, paper_id, table_id)
