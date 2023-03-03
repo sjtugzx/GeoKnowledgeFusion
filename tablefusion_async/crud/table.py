@@ -31,14 +31,22 @@ class TableDirection(str, Enum):
 
 
 class TableOutline(BaseModel):
-    table_id: int
-    page: int
-    x1: float
-    y1: float
-    x2: float
-    y2: float
-    direction: TableDirection
-    confirmed: bool
+    table_id: int = 0
+    page: int = 0  # 项目内部page从0开始计数
+    x1: float = 0.0
+    y1: float = 0.0
+    x2: float = 0.0
+    y2: float = 0.0
+    direction: TableDirection = "up"
+    confirmed: bool = False
+
+
+class TableStructure(BaseModel):
+    area: List[float] = []
+    rows: List[float] = []  # collums和rows是相对于area大框的相对位置
+    columns: List[float] = []
+    cells: List[List[TableCell]] = []
+    confirmed: bool = False
 
 
 class TableContent(BaseModel):
