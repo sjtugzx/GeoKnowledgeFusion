@@ -29,7 +29,7 @@ def outline_detect(
 
     table_outlines = crud.table.get_outline(paper_id, DB=DB)
     new_table_outlines = []
-    next_table_id = max(table_outlines, default=0, key=lambda x: x['entity_id']) + 1
+    next_table_id = max(table_outlines, default=0, key=lambda x: x.table_id).table_id + 1
 
     host = config.SERVICE_BACKEND_INFO["table_outline"]["host"]
     port = config.SERVICE_BACKEND_INFO["table_outline"]["port"]
