@@ -97,7 +97,7 @@ def get_table(
         table_id: int,
 ) -> Optional[Table]:
     table = Table()
-    table.enable_access()
+    # table.enable_access()
     sql = '''
             SELECT table_id as table_id, pdf_page as pdf_page, raw_outer_line_x1 as raw_x1, raw_outer_line_y1 as raw_y1,
             raw_outer_line_x2 as raw_x2,raw_outer_line_y2 as raw_y2, final_outer_line_x1 as final_x1,
@@ -131,8 +131,8 @@ def get_table(
     structureri = TableStructure.parse_raw(ret["ri"]) if ret["ri"] is not None and len(
         ret["ri"]) != 0 else TableStructure()
 
-    structureri.enable_access()
-    structurefi.enable_access()
+    # structureri.enable_access()
+    # structurefi.enable_access()
     if structurefi != TableStructure() and structurefi != structureri:
         table.structure = structurefi
         # logger.info("建表过程:fin innerline:", structurefi)
