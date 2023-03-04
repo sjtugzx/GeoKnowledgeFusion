@@ -114,7 +114,7 @@ def inner_detect(
         texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
         excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
 
-        table.content.excel_path = excel_path
+        table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
         table.content.text = texts
         table.content.confirmed = False
         if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
