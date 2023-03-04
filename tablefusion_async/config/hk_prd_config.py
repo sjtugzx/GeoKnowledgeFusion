@@ -87,4 +87,4 @@ amqp = 'amqp-sg-4hr2x66wm001.cn-hongkong.amqp-0.vpc.mq.amqp.aliyuncs.com'
 queue_name = "table_fusion"
 
 CELERY_BROKER_URL = f'pyamqp://{rabbitmq_key_id}:{rabbitmq_key_secret}@{amqp}:5672//{queue_name}'
-CELERY_RESULT_BACKEND = 'db+mysql://groupleader:rCKog0aZKr*bPBKk' + mysql_host + ':3306/celery'
+CELERY_RESULT_BACKEND = 'db+mysql://groupleader:rCKog0aZKr*bPBKk' + "@" + mysql_host + ':3306/celery'
