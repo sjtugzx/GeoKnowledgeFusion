@@ -23,6 +23,7 @@ def outline_detect(
         **kwargs,
 ) -> str:
     DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
+    user_id = kwargs["user_id"] if kwargs and "user_id" in kwargs else None
     page2image = crud.pdf.get_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDF2IMAGE_IMAGE, DB=DB)
     if not page2image:
         raise TaskFailure(f'images of {paper_id} not found')
@@ -61,6 +62,7 @@ def outline_detect(
 
     try:
         crud.table.save_outline(paper_id, new_table_outlines, DB=DB)
+        crud.paper_list.update_paper_list_status(paper_id, user_id, "processed", _type="table_status")
     except Exception as e:
         logger.error(f"Could not write out result for table_outlines of paper {paper_id}", exc_info=e)
         raise TaskFailure(f"Could not write out result for table_outlines of paper {paper_id}")

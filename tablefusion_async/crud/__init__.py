@@ -3,5 +3,6 @@ from . import (
     meta,
     text,
     table,
-    model
+    model,
+    paper_list
 )
