@@ -13,7 +13,7 @@ from .utils import table_overlap
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True, base=BaseTask, time_limit=180)
+@app.task(bind=True, base=BaseTask, time_limit=60*5)
 def outline_detect(
         self,
         paper_id: str,
