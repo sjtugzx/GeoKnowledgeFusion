@@ -164,12 +164,13 @@ def pdffigures2_image(
         reset: bool = False,
         **kwargs,
 ) -> str:
+    DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
     existing_content = crud.pdf.get_pdf_content(paper_id,
-                                                crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META).get(0, b'')
+                                                crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, DB=DB).get(0, b'')
     if not reset and existing_content and existing_content != b'[]':  # 确定已有结果且不是之前写入的empty result
         return 'Result exists. Task skip'
 
-    pdf_bytes = crud.pdf.get_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDF).get(0, b'')
+    pdf_bytes = crud.pdf.get_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDF, DB=DB).get(0, b'')
     if not pdf_bytes:
         raise TaskFailure(f'pdf {paper_id} not found')
 
@@ -207,8 +208,8 @@ def pdffigures2_image(
             item['renderID'] = idx + 1
             item.pop('renderImageBase64')
             item.pop('renderURL')
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)})
+        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
+        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)}, DB=DB)
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
