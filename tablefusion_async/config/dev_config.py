@@ -57,11 +57,7 @@ SERVICE_BACKEND_INFO = {
     "table_outline": {
         'host': '10.10.10.221',
         'port': 9091,
-    },
-    # "table_outline": {
-    #     'host': '8.218.142.109',
-    #     'port': 9092
-    # }
+    }
 }
 
 MYSQL_INFO = {

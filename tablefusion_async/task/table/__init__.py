@@ -3,6 +3,7 @@ import base64
 import logging
 
 import requests
+from billiard.exceptions import TimeLimitExceeded
 
 from tablefusion_async.main import app
 from tablefusion_async.common import BaseTask, TaskFailure
@@ -13,7 +14,8 @@ from .utils import table_overlap
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True, base=BaseTask, time_limit=60*5)
+@app.task(bind=True, base=BaseTask, time_limit=60*5,
+          autoretry_for=(TimeLimitExceeded,), retry_kwargs={'max_retries': 3, 'countdown': 5})
 def outline_detect(
         self,
         paper_id: str,
