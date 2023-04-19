@@ -69,7 +69,7 @@ SERVICE_BACKEND_INFO = {
     },
     "table_outline": {
         'host': '10.15.13.139',
-        'port': 9092
+        'port': 9001
     }
 }
 
