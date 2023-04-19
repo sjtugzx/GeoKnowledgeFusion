@@ -63,7 +63,7 @@ def outline_detect(
 
     try:
         crud.table.save_outline(paper_id, new_table_outlines, DB=DB)
-        crud.paper_list.update_paper_list_status(paper_id, user_id, "processed", _type="table_status")
+        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="table_status")
     except Exception as e:
         logger.error(f"Could not write out result for table_outlines of paper {paper_id}", exc_info=e)
         raise TaskFailure(f"Could not write out result for table_outlines of paper {paper_id}")
