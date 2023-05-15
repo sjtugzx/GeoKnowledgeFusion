@@ -56,6 +56,7 @@ ES_INFO = {
 8061  pdffigures2-server
 8066  science-parse-server
 10.15.13.137:90  table-outline-server  (开了三个外框线 nginx轮询)
+/dkvl/etc/nginx/conf.d/proxy_table.conf 
 """
 
 SERVICE_BACKEND_INFO = {
