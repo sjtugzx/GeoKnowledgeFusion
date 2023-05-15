@@ -49,6 +49,7 @@ def outline_detect(
 
         try:
             T = requests.post(f'http://10.15.13.137:90/detect', data=datas)
+            T = json.loads(T.text)
             print(T)
         except:
             pass
