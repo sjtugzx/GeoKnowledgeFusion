@@ -132,6 +132,7 @@ def save_paper_meta_to_mysql_from_grobid_text(grobid_content, paper_id, user_id)
                      info["doi"], info["link"], info["pdf_link"], info["publisher"],
                      info["language"], user_id)
 
-    sql2 = "UPDATE `paper_list` SET display_name = %s WHERE pdf_md5 = %s;"
-    db.mysql_execute(sql2, info["title"], paper_id)
+    if info["title"]:
+        sql2 = "UPDATE `paper_list` SET display_name = %s WHERE pdf_md5 = %s;"
+        db.mysql_execute(sql2, info["title"], paper_id)
 

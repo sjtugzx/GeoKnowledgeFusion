@@ -14,7 +14,8 @@ from .utils import table_overlap
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True, base=BaseTask, time_limit=60*5) # autoretry_for=(TimeLimitExceeded,), retry_kwargs={'max_retries': 3, 'countdown': 5}
+@app.task(bind=True, base=BaseTask,
+          time_limit=60 * 5)  # autoretry_for=(TimeLimitExceeded,), retry_kwargs={'max_retries': 3, 'countdown': 5}
 def outline_detect(
         self,
         paper_id: str,
@@ -44,8 +45,14 @@ def outline_detect(
         datas = json.dumps({'base64': img_base64})
 
         tablecorlist_txt = requests.post(f'http://{host}:{port}/detect', data=datas)
-
         tablecorlist = json.loads(tablecorlist_txt.text)
+
+        try:
+            T = requests.post(f'http://10.15.13.137:90/detect', data=datas)
+            print(T)
+        except:
+            pass
+
         if "tablecorlist" not in tablecorlist:
             raise TaskFailure(f'外框线获取失败 tablecorlist not in tablecorlist_txt', tablecorlist)
 
