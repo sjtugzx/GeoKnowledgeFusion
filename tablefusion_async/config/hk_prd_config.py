@@ -55,7 +55,7 @@ ES_INFO = {
 8074  grobid-server
 8061  pdffigures2-server
 8066  science-parse-server
-9092  table-outline-server
+90  table-outline-server  (开了三个外框线 nginx轮询)
 """
 
 SERVICE_BACKEND_INFO = {
@@ -69,7 +69,7 @@ SERVICE_BACKEND_INFO = {
     },
     "table_outline": {
         'host': '10.15.13.139',
-        'port': 9001
+        'port': 90
     }
 }
 
