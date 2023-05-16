@@ -46,17 +46,7 @@ def outline_detect(
 
         tablecorlist_txt = requests.post(f'http://{host}:{port}/detect', data=datas)
         tablecorlist = json.loads(tablecorlist_txt.text)
-        print("9001 tablecorlist : ", tablecorlist)
-
-        try:
-            T = requests.post(f'http://10.15.13.137:90/detect', data=datas)
-            T = json.loads(T.text)
-            print("90 tablecorlist : ", T)
-        except:
-            pass
-
-        if "tablecorlist" not in tablecorlist:
-            raise TaskFailure(f'外框线获取失败 tablecorlist not in tablecorlist_txt', tablecorlist)
+        print("90 tablecorlist : ", tablecorlist)
 
         for tablecol in tablecorlist['tablecorlist']:
             table_oueline = crud.table.TableOutline(

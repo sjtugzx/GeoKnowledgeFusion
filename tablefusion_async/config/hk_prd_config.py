@@ -57,6 +57,37 @@ ES_INFO = {
 8066  science-parse-server
 10.15.13.137:90  table-outline-server  (开了三个外框线 nginx轮询)
 /dkvl/etc/nginx/conf.d/proxy_table.conf 
+upstream table {
+    server 10.15.13.139:9001;
+    server 10.15.13.140:9001;
+    server 10.15.13.140:9092;
+    keepalive 16;
+}
+
+server {
+    listen 90;
+    server_name 127.0.0.1;
+
+    #访问日志及调用格式
+    access_log  /var/log/nginx/proxy_table.access.log  main;
+
+    location / {
+        proxy_pass http://table;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_connect_timeout 60;
+        proxy_send_timeout 60;
+        proxy_read_timeout 60;
+        
+        proxy_buffering on;
+        proxy_buffer_size 32k;
+        proxy_buffers 4 128k;
+        proxy_http_version 1.1;
+        client_max_body_size 9999m;
+    }
+}
 """
 
 SERVICE_BACKEND_INFO = {
@@ -68,13 +99,9 @@ SERVICE_BACKEND_INFO = {
         'host': '10.15.13.139',
         'port': 8061,
     },
-    # "table_outline": {
-    #     'host': '10.15.13.137',
-    #     'port': 90
-    # },
     "table_outline": {
-        'host': '10.15.13.139',
-        'port': 9001
+        'host': '10.15.13.137',
+        'port': 90
     }
 }
 
