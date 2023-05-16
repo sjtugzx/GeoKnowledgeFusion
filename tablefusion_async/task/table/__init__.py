@@ -46,11 +46,12 @@ def outline_detect(
 
         tablecorlist_txt = requests.post(f'http://{host}:{port}/detect', data=datas)
         tablecorlist = json.loads(tablecorlist_txt.text)
+        print("9001 tablecorlist : ", tablecorlist)
 
         try:
             T = requests.post(f'http://10.15.13.137:90/detect', data=datas)
             T = json.loads(T.text)
-            print(T)
+            print("90 tablecorlist : ", T)
         except:
             pass
 
