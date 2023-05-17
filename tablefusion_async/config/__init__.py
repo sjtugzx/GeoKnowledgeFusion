@@ -85,7 +85,7 @@ CELERY_TASK_REJECT_ON_WORKER_LOST = True
 CELERY_ACKS_LATE = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_QUEUES = (
-    Queue('test', Exchange('test'), routing_key='test', queue_arguments={'x-max-priority': 10})
+    Queue('test', Exchange('test'), routing_key='test', queue_arguments={'x-max-priority': 10}),
 )
 CELERY_ROUTES = {
     'tasks.task_test.test_1': {'queue': 'test'},
