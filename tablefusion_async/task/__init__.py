@@ -9,3 +9,4 @@
 
 from . import pdf  # text image
 from . import table  # 表格框线和内容
+from . import task_test
