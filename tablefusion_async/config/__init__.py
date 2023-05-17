@@ -91,7 +91,8 @@ CELERY_QUEUES = (
 CELERY_ROUTES = {
     'tasks.task_test.test_1': {'queue': 'test'},
     'tasks.task_test.test_2': {'queue': 'test'},
-    'tasks.task_test.test_3': {'queue': 'test'}
+    'tasks.task_test.test_3': {'queue': 'test'},
+    'tasks.task_test.test_4': {'queue': 'test'}
 }
 CELERY_TASK_QUEUE_MAX_PRIORITY = 10
 CELERY_TASK_DEFAULT_PRIORITY = 5
