@@ -3,12 +3,12 @@ from tablefusion_async.common import BaseTask, TaskFailure
 from celery import current_task
 
 
-@app.task(bind=True, base=BaseTask, queue="test")
+@app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_1(self, *args):
     print("1 : ", args)
 
 
-@app.task(bind=True, base=BaseTask, queue="test")
+@app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_2(self, *args):
     print("2 : ", args)
 
