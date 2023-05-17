@@ -86,6 +86,7 @@ CELERY_ACKS_LATE = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_QUEUES = (
     # Queue('celery', Exchange('celery'), routing_key='celery', queue_arguments={'x-max-priority': 10}),
+    Queue('table_fusion', Exchange('table_fusion'), routing_key='table_fusion', queue_arguments={'x-max-priority': 10}),
     Queue('test', Exchange('test'), routing_key='test', queue_arguments={'x-max-priority': 10}),
 )
 CELERY_TASK_QUEUE_MAX_PRIORITY = 10
