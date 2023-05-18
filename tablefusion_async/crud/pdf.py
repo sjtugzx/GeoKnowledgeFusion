@@ -11,7 +11,7 @@ class PdfContentTypeEnum(str, Enum):
     PDF = 'pdf'
     GROBID_TEXT = 'grobid_text'
     # SCIENCEPARSE_TEXT = 'scienceparse_text'
-    PDF2IMAGE_IMAGE = 'pdf2image_image'   # fitz_image pdf每页是一张图片
+    PDF2IMAGE_IMAGE = 'pdf2image_image'  # fitz_image pdf每页是一张图片
     PDFFIGURES2_IMAGE = 'pdffigures2_image'  # pdf内的图片
     PDFFIGURES2_IMAGE_META = 'pdffigures2_image_meta'
     # PDFFIGURES2_TEXT = 'pdffigures2_text'
