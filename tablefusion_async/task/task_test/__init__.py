@@ -4,20 +4,19 @@ from tablefusion_async.common import BaseTask, TaskFailure
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_1(self, *args):
-    print("1 : ", args)
-    print(f"{self.request.delivery_info['routing_key']=}")
+    print(f"1 : {args} {self.request.delivery_info['routing_key']}")
 
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_2(self, *args):
-    print("2 : ", args)
+    print(f"2 : {args} {self.request.delivery_info['routing_key']}")
 
 
 @app.task(bind=True, base=BaseTask, queue="test")
 def test_3(self, *args):
-    print("3 : ", args)
+    print(f"3 : {args} {self.request.delivery_info['routing_key']}")
 
 
 @app.task(bind=True, base=BaseTask, queue="test")
 def test_4(self, *args):
-    print("4 : ", args)
+    print(f"4 : {args} {self.request.delivery_info['routing_key']}")
