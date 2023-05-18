@@ -5,7 +5,7 @@ from tablefusion_async.common import BaseTask, TaskFailure
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_1(self, *args):
     print("1 : ", args)
-    print(f"{self.request['routing_key']=}")
+    print(f"{self.request.delivery_info['routing_key']=}")
 
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
