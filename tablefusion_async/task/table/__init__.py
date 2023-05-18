@@ -64,6 +64,7 @@ def outline_detect(
                 next_table_id += 1
 
     try:
+        print("save_outline:")
         crud.table.save_outline(paper_id, new_table_outlines, DB=DB)
         crud.paper_list.update_paper_list_status(paper_id, "processed", _type="table_status")
     except Exception as e:
@@ -122,6 +123,7 @@ def inner_detect(
         table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
         table.content.text = texts
         table.content.confirmed = False
+        print("save_table_content:")
         if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
             raise TaskFailure(f"表格内容保存错误 {paper_id}")
         print(f'table_content have been extracted and saved')

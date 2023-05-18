@@ -374,6 +374,7 @@ def ocr_pdf(paper_id: str, pdf_path, page):
     pdf_out = os.path.join(config.PDF_PROCESS_DIR, paper_id + "_{}_ocr.pdf".format(page))
     if os.path.exists(pdf_out):
         return pdf_out
+    # Could not find program 'gs' on the PATH ? (apt install ghostscript)
     ocrmypdf.ocr(pdf_path, pdf_out, pages=str(page + 1), use_threads=False, language="eng+chi_sim",
                  pdfa_image_compression="lossless")
     return pdf_out

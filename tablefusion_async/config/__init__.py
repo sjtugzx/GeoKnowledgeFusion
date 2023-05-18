@@ -74,7 +74,10 @@ ACCESS_TOKEN_SECRET_KEY = "92c384453c76c7396310176588306061d39c19a508b2f41682b26
 ACCESS_TOKEN_ALGORITHM = "HS256"
 
 CELERY_TIMEZONE = 'Asia/Shanghai'
-# CELERYD_PREFETCH_MULTIPLIER = 4  # celery worker每次去redis取任务的数量，默认值就是4
+# 这意味着工作进程将预取任务数的四倍，即它可以处理的并发进程数。例如，如果您有四个工作进程，
+# 每个进程一次能够处理一个任务，则工作进程将在确认收到任务之前预取16个任务并将其保存在内存中。  已经弃用
+# CELERYD_PREFETCH_MULTIPLIER = 4
+# CELERY_WORKER_REFETCH_MULTIPLIER = 4  # https://docs.celeryq.dev/en/stable/userguide/configuration.html
 # CELERYD_CONCURRENCY = 20         # 并发的worker数量，也是命令行-c指定的数目  Default: Number of CPU cores.
 CELERY_ENABLE_UTC = True
 CELERY_TRACK_STARTED = True
@@ -85,7 +88,9 @@ CELERY_TASK_REJECT_ON_WORKER_LOST = True
 CELERY_ACKS_LATE = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_QUEUES = (
-    Queue('tasks', Exchange('tasks'), routing_key='tasks', queue_arguments={'x-max-priority': 10}),
+    Queue('celery', Exchange('celery'), routing_key='celery', queue_arguments={'x-max-priority': 10}),
+    Queue('table_fusion', Exchange('table_fusion'), routing_key='table_fusion', queue_arguments={'x-max-priority': 10}),
+    Queue('test', Exchange('test'), routing_key='test', queue_arguments={'x-max-priority': 10}),
 )
 CELERY_TASK_QUEUE_MAX_PRIORITY = 10
 CELERY_TASK_DEFAULT_PRIORITY = 5
