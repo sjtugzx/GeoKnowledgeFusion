@@ -1,16 +1,19 @@
 from tablefusion_async.main import app
 from tablefusion_async.common import BaseTask, TaskFailure
-from celery import current_task
 
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_1(self, *args):
-    print("1 : ", args)
+    print("1 : ", args, self.request)
 
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_2(self, *args):
     print("2 : ", args)
+    try:
+        print(self.request.delivery_info['routing_key'])
+    except Exception as e:
+        print("error: ", e)
 
 
 @app.task(bind=True, base=BaseTask, queue="test")
