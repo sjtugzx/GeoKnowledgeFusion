@@ -4,16 +4,13 @@ from tablefusion_async.common import BaseTask, TaskFailure
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_1(self, *args):
-    print("1 : ", args, self.request)
+    print("1 : ", args)
+    print(f"{self.request['routing_key']=}")
 
 
 @app.task(bind=True, base=BaseTask, queue="table_fusion")
 def test_2(self, *args):
     print("2 : ", args)
-    try:
-        print(self.request.delivery_info['routing_key'])
-    except Exception as e:
-        print("error: ", e)
 
 
 @app.task(bind=True, base=BaseTask, queue="test")
