@@ -1,3 +1,5 @@
+from kombu import Queue, Exchange
+
 BASE_URL = 'https://tablefusion.acemap.cn/'
 
 # PDF_SERVER_HOST = '10.10.10.18'
@@ -124,3 +126,8 @@ queue_name = "table_fusion"
 
 CELERY_BROKER_URL = f'pyamqp://{rabbitmq_key_id}:{rabbitmq_key_secret}@{amqp}:5672//{queue_name}'
 CELERY_RESULT_BACKEND = 'db+mysql://groupleader:rCKog0aZKr*bPBKk' + "@" + mysql_host + ':3306/celery'
+
+CELERY_QUEUES = (
+    Queue('celery', Exchange('celery'), routing_key='celery', queue_arguments={'x-max-priority': 10}),
+    Queue('table_fusion', Exchange('table_fusion'), routing_key='table_fusion', queue_arguments={'x-max-priority': 10}),
+)

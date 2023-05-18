@@ -263,6 +263,8 @@ class PdfContentTypeEnum(str, Enum):
     PDF = 'pdf'
     GROBID_TEXT = 'grobid_text'  # Meta
     PDF2IMAGE_IMAGE = 'pdf2image_image'  # table
+    PDFFIGURES2_IMAGE = 'pdffigures2_image'  # pdf内的图片
+    PDFFIGURES2_IMAGE_META = 'pdffigures2_image_meta'
 
 
 def get_pdf_content(
