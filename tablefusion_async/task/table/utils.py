@@ -32,14 +32,10 @@ def check_table_exists(pdf_bytes):
 
 
 def is_table_image(image):
-    # Replace this with your table detection logic using image processing
-    # You can use techniques like template matching, contour detection, etc.
-    # Example: Check if the image has a certain size or aspect ratio
-    width = image["width"]
-    height = image["height"]
+    width = image[2]
+    height = image[3]
     if width > 100 and height > 100:
         return True
-
     return False
 
 # def check_table_exists(pdf_path):
