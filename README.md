@@ -20,8 +20,8 @@ pipenv requirements > /requirements.txt
 
 ```shell
 crontab -e
-# 每两小说重启容器
-0 */2 * * * docker restart tablefusion-async_worker_1
+# 重启容器
+*/30 0 * * * docker restart tablefusion-async_worker_1
 # 使定时任务生效
 systemctl restart crond
 # 查看所有定时任务

@@ -13,7 +13,7 @@ import numpy as np
 import xlwt
 from PIL import Image
 
-from typing import List, Dict, Union, Any, Optional
+from typing import List, Dict, Union, Any, Optional, Tuple
 from enum import Enum
 from pydantic import BaseModel
 from .model import *
@@ -64,7 +64,7 @@ class Table(BaseModel):
 def get_outline(
         paper_id: str,
         DB: str = None
-) -> List[TableOutline]:
+) -> Tuple[List[TableOutline], int]:
     if DB is None:
         DB = "dde_table_fusion"
 
@@ -76,9 +76,9 @@ def get_outline(
             FROM `table` WHERE pdf_md5 = %s AND is_deleted = '0'
         '''
     ret = db.mysql_select(sql, paper_id, cursor_type=db.DictCursor, db=DB)
-
-    result = [
-        TableOutline.parse_obj({
+    result, have_table = [], 0
+    for row in ret:
+        t = TableOutline.parse_obj({
             'table_id': row['table_id'],
             'page': row['page'],
             'x1': row['final_x1'] if row['confirmed'] else row['raw_x1'],
@@ -87,9 +87,15 @@ def get_outline(
             'y2': row['final_y2'] if row['confirmed'] else row['raw_y2'],
             'direction': row['direction'],
             'confirmed': row['confirmed'],
-        }) for row in ret
-    ]
-    return result
+        })
+        result.append(t)
+
+    sql2 = "SELECT have_table FROM `paper_list`  WHERE pdf_md5 = %s;"
+    db.mysql_select(sql2, paper_id, cursor_type=db.DictCursor, db=DB)
+    for row in ret:
+        have_table = row["have_table"]
+
+    return result, have_table
 
 
 def get_table(
@@ -191,6 +197,18 @@ def save_outline(
         for table in new_table_outlines
     ]
     db.mysql_executemany(sql, new_rows, db=DB)
+
+
+def save_have_table(
+        paper_id: str,
+        have_table: int,
+        DB: str = None
+) -> None:
+    if DB is None:
+        DB = "dde_table_fusion"
+
+    sql = f"UPDATE `paper_list` SET have_table = %s WHERE pdf_md5 = %s;"
+    db.mysql_execute(sql, have_table, paper_id)
 
 
 ############################################################################################################
