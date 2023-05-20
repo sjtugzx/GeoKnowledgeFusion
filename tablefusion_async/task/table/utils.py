@@ -11,15 +11,17 @@ def table_overlap(
             or outline1.y1 >= outline2.y2 or outline2.y1 >= outline1.y2)
 
 
-# todo: 判断pdf是否存在表格 paper_list 表添加一列
+# 判断pdf是否存在表格 paper_list 表添加一列
 def check_table_exists(file):
-    reader = PyPDF2.PdfReader(file)
-    num_pages = len(reader.pages)
-    for page_number in range(num_pages):
-            page = reader.pages[page_number]
-            text = page.extract_text()
+    reader = PyPDF2.PdfFileReader(file)
+    num_pages = reader.numPages
 
-            # Replace this with your table detection logic
-            if 'Table' in text:
-                return True
+    for page_number in range(num_pages):
+        page = reader.getPage(page_number)
+        text = page.extractText()
+
+        # Replace this with your table detection logic
+        if 'table' in text.lower():
+            return True
+
     return False
