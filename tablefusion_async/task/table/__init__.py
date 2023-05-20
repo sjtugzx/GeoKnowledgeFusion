@@ -35,7 +35,11 @@ def outline_detect(
         if not pdf_bytes:
             raise TaskFailure(f'pdf {paper_id} not found')
 
-        have_table = 1 if check_table_exists(pdf_bytes) else 2
+        try:
+            have_table = 1 if check_table_exists(pdf_bytes) else 2
+        except Exception as e:
+            have_table = 1
+            print(e)
         crud.table.save_have_table(paper_id, have_table, DB=DB)
 
     if have_table == 2:
@@ -164,7 +168,11 @@ def outline_detect_1(
         if not pdf_bytes:
             raise TaskFailure(f'pdf {paper_id} not found')
 
-        have_table = 1 if check_table_exists(pdf_bytes) else 2
+        try:
+            have_table = 1 if check_table_exists(pdf_bytes) else 2
+        except Exception as e:
+            have_table = 1
+            print(e)
         crud.table.save_have_table(paper_id, have_table, DB=DB)
 
     if have_table == 2:
@@ -286,7 +294,11 @@ def outline_detect_2(
         if not pdf_bytes:
             raise TaskFailure(f'pdf {paper_id} not found')
 
-        have_table = 1 if check_table_exists(pdf_bytes) else 2
+        try:
+            have_table = 1 if check_table_exists(pdf_bytes) else 2
+        except Exception as e:
+            have_table = 1
+            print(e)
         crud.table.save_have_table(paper_id, have_table, DB=DB)
 
     if have_table == 2:
