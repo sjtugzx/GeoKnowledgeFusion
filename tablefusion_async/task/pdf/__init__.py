@@ -9,6 +9,7 @@ import logging
 
 import fitz
 from PIL import Image
+import PyPDF2
 import requests
 # from science_parse_api.api import parse_pdf
 # from pdfminer.converter import PDFPageAggregator
@@ -209,7 +210,8 @@ def pdffigures2_image(
             item.pop('renderImageBase64')
             item.pop('renderURL')
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)}, DB=DB)
+        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                  DB=DB)
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
@@ -218,6 +220,23 @@ def pdffigures2_image(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}")
 
     return result
+
+
+# todo: 判断pdf是否存在表格 paper_list 表添加一列
+def check_table_exists(pdf_path):
+    with open(pdf_path, 'rb') as file:
+        reader = PyPDF2.PdfReader(file)
+        num_pages = len(reader.pages)
+
+        for page_number in range(num_pages):
+            page = reader.pages[page_number]
+            text = page.extract_text()
+
+            # Replace this with your table detection logic
+            if 'Table' in text:
+                return True
+
+    return False
 
 
 #############################################################################
@@ -405,7 +424,75 @@ def pdffigures2_image_2(
             item.pop('renderImageBase64')
             item.pop('renderURL')
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)}, DB=DB)
+        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                  DB=DB)
+    except Exception as e:
+        logger.error(
+            f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
+            exc_info=e)
+        raise TaskFailure(
+            f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}")
+
+    return result
+
+
+@app.task(bind=True, base=BaseTask, queue="test")
+def pdffigures2_image_3(
+        self,
+        paper_id: str,
+        project_id: int = 0,
+        content_id: int = 0,
+        *args,
+        reset: bool = False,
+        **kwargs,
+) -> str:
+    DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
+    existing_content = crud.pdf.get_pdf_content(paper_id,
+                                                crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, DB=DB).get(0, b'')
+    if not reset and existing_content and existing_content != b'[]':  # 确定已有结果且不是之前写入的empty result
+        return 'Result exists. Task skip'
+
+    pdf_bytes = crud.pdf.get_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDF, DB=DB).get(0, b'')
+    if not pdf_bytes:
+        raise TaskFailure(f'pdf {paper_id} not found')
+
+    files = {
+        'file': (
+            f'{paper_id}.pdf',
+            pdf_bytes,
+            'application/pdf',
+            {'Expires': '0'}
+        )
+    }
+
+    host = config.SERVICE_BACKEND_INFO["pdffigures2"]["host"]
+    port = config.SERVICE_BACKEND_INFO["pdffigures2"]["port"]
+    url = f'http://{host}:{port}/v1/parse/figure'
+
+    while True:
+        r = requests.post(url=url, files=files)
+        if r.status_code == 200:  # success
+            data = r.json()
+            result = f'pdffigures2-image parse success, {len(data)} image have been extracted and saved'
+            break
+        elif r.status_code != 500:  # not 503 means fatal error, do not re-try, return directly
+            data = []
+            logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
+            result = 'pdffigures2-image parse failed, write empty json file'
+            break
+        time.sleep(3)
+
+    try:
+        id2content = {}
+        for idx, item in enumerate(data):
+            image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
+            id2content[idx + 1] = image_file_content
+            item['renderID'] = idx + 1
+            item.pop('renderImageBase64')
+            item.pop('renderURL')
+        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
+        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                  DB=DB)
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
