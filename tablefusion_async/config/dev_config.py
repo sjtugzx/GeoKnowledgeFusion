@@ -1,5 +1,3 @@
-from kombu import Queue, Exchange
-
 BASE_URL = 'http://10.10.10.225:8189/'
 
 # PDF_SERVER_HOST = '10.10.10.10'
@@ -101,9 +99,3 @@ MYSQL_INFO = {
 
 CELERY_BROKER_URL = 'pyamqp://guest:guest@10.10.10.10:5672//tablefusion'
 CELERY_RESULT_BACKEND = 'db+mysql://groupleader:onlyleaders@10.10.10.10:3306/celery'
-
-CELERY_QUEUES = (
-    Queue('celery', Exchange('celery'), routing_key='celery', queue_arguments={'x-max-priority': 10}),
-    Queue('table_fusion', Exchange('table_fusion'), routing_key='table_fusion', queue_arguments={'x-max-priority': 10}),
-    Queue('test', Exchange('test'), routing_key='test', queue_arguments={'x-max-priority': 10}),
-)

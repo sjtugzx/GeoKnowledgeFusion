@@ -17,3 +17,13 @@
 pipenv lock 
 pipenv requirements > /requirements.txt 
 ```
+
+```shell
+crontab -e
+# 重启容器
+*/30 0 * * * docker restart tablefusion-async_worker_1
+# 使定时任务生效
+systemctl restart crond
+# 查看所有定时任务
+crontab -l
+```
