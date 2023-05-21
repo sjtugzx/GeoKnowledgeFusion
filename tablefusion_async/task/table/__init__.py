@@ -395,3 +395,7 @@ def inner_detect_2(
         print(f'table_content have been extracted and saved')
 
     return f'table_inner and table_content have been extracted and saved'
+
+# @app.task(bind=True, base=BaseTask, queue="table_fusion")
+# def test_1(self, *args):
+#     print(f"1 : {args} {self.request.delivery_info['routing_key']}")
