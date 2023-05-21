@@ -91,7 +91,7 @@ def get_outline(
         result.append(t)
 
     sql2 = "SELECT have_table FROM `paper_list`  WHERE pdf_md5 = %s;"
-    db.mysql_select(sql2, paper_id, cursor_type=db.DictCursor, db=DB)
+    ret = db.mysql_select(sql2, paper_id, cursor_type=db.DictCursor, db=DB)
     for row in ret:
         have_table = row["have_table"]
 
