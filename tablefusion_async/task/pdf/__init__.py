@@ -211,6 +211,7 @@ def pdffigures2_image(
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
                                   DB=DB)
+        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
@@ -408,6 +409,7 @@ def pdffigures2_image_1(
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
                                   DB=DB)
+        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
@@ -604,6 +606,7 @@ def pdffigures2_image_3(
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
                                   DB=DB)
+        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
