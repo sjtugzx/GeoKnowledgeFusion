@@ -90,14 +90,31 @@ server {
 }
 """
 
+
+"""
+upstream pdf {
+    server 10.15.13.139:8061;
+    server 10.15.13.140:8061;
+    server 10.15.13.138:8061;
+    keepalive 16;
+}
+
+server {
+    listen 91;
+    server_name 127.0.0.1;
+
+    #访问日志及调用格式
+    access_log  /var/log/nginx/proxy_pdffigures2.access.log  main;
+"""
+
 SERVICE_BACKEND_INFO = {
     "grobid": {
         'host': '10.15.13.139',
         'port': 8074,
     },
     "pdffigures2": {
-        'host': '10.15.13.139',
-        'port': 8061,
+        'host': '10.15.13.137',
+        'port': 91,
     },
     "table_outline": {
         'host': '10.15.13.137',
