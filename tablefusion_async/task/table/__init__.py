@@ -59,7 +59,7 @@ def outline_detect(
 
         tablecorlist_txt = requests.post(f'http://{host}:{port}/detect', data=datas)
         tablecorlist = json.loads(tablecorlist_txt.text)
-        print("90 tablecorlist : ", tablecorlist)
+        # print("90 tablecorlist : ", tablecorlist)
 
         for tablecol in tablecorlist['tablecorlist']:
             table_oueline = crud.table.TableOutline(
@@ -113,33 +113,36 @@ def inner_detect(
 
     table_ids = crud.table.get_inner(paper_id)
     for table_id in table_ids:
-        meta = crud.table.get_and_set_table_meta(paper_id, table_id)
-        page = meta["page"]
-        pdfpath = meta["pdfpath"]
-        xmlpath = meta["xmlpath"]
-        structure = crud.table.detect_table_structure(paper_id, meta)
-        if crud.table.save_table_structure(paper_id, table_id, structure, 0):
-            raise TaskFailure(f"表格内结构保存错误 {paper_id}")
-        print(f'table_inner have been extracted and saved')
+        try:
+            meta = crud.table.get_and_set_table_meta(paper_id, table_id)
+            page = meta["page"]
+            pdfpath = meta["pdfpath"]
+            xmlpath = meta["xmlpath"]
+            structure = crud.table.detect_table_structure(paper_id, meta)
+            if crud.table.save_table_structure(paper_id, table_id, structure, 0):
+                raise TaskFailure(f"表格内结构保存错误 {paper_id}")
+            print(f'table_inner have been extracted and saved')
 
-        table = crud.table.get_table(paper_id, table_id)
-        areas = []
-        for row in structure.cells:
-            for col in row:
-                areas.append(
-                    get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
-                                  structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
-                )
-        texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
-        excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
+            table = crud.table.get_table(paper_id, table_id)
+            areas = []
+            for row in structure.cells:
+                for col in row:
+                    areas.append(
+                        get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
+                                      structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
+                    )
+            texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
+            excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
 
-        table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
-        table.content.text = texts
-        table.content.confirmed = False
-        print("save_table_content:")
-        if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
-            raise TaskFailure(f"表格内容保存错误 {paper_id}")
-        print(f'table_content have been extracted and saved')
+            table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
+            table.content.text = texts
+            table.content.confirmed = False
+            print("save_table_content:")
+            if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
+                raise TaskFailure(f"表格内容保存错误 {paper_id}")
+            print(f'table_content have been extracted and saved')
+        except:
+            pass
 
     return f'table_inner and table_content have been extracted and saved'
 
@@ -192,7 +195,7 @@ def outline_detect_1(
 
         tablecorlist_txt = requests.post(f'http://{host}:{port}/detect', data=datas)
         tablecorlist = json.loads(tablecorlist_txt.text)
-        print("90 tablecorlist : ", tablecorlist)
+        # print("90 tablecorlist : ", tablecorlist)
 
         for tablecol in tablecorlist['tablecorlist']:
             table_oueline = crud.table.TableOutline(
@@ -240,33 +243,36 @@ def inner_detect_1(
 
     table_ids = crud.table.get_inner(paper_id)
     for table_id in table_ids:
-        meta = crud.table.get_and_set_table_meta(paper_id, table_id)
-        page = meta["page"]
-        pdfpath = meta["pdfpath"]
-        xmlpath = meta["xmlpath"]
-        structure = crud.table.detect_table_structure(paper_id, meta)
-        if crud.table.save_table_structure(paper_id, table_id, structure, 0):
-            raise TaskFailure(f"表格内结构保存错误 {paper_id}")
-        print(f'table_inner have been extracted and saved')
+        try:
+            meta = crud.table.get_and_set_table_meta(paper_id, table_id)
+            page = meta["page"]
+            pdfpath = meta["pdfpath"]
+            xmlpath = meta["xmlpath"]
+            structure = crud.table.detect_table_structure(paper_id, meta)
+            if crud.table.save_table_structure(paper_id, table_id, structure, 0):
+                raise TaskFailure(f"表格内结构保存错误 {paper_id}")
+            print(f'table_inner have been extracted and saved')
 
-        table = crud.table.get_table(paper_id, table_id)
-        areas = []
-        for row in structure.cells:
-            for col in row:
-                areas.append(
-                    get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
-                                  structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
-                )
-        texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
-        excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
+            table = crud.table.get_table(paper_id, table_id)
+            areas = []
+            for row in structure.cells:
+                for col in row:
+                    areas.append(
+                        get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
+                                      structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
+                    )
+            texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
+            excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
 
-        table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
-        table.content.text = texts
-        table.content.confirmed = False
-        print("save_table_content:")
-        if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
-            raise TaskFailure(f"表格内容保存错误 {paper_id}")
-        print(f'table_content have been extracted and saved')
+            table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
+            table.content.text = texts
+            table.content.confirmed = False
+            print("save_table_content:")
+            if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
+                raise TaskFailure(f"表格内容保存错误 {paper_id}")
+            print(f'table_content have been extracted and saved')
+        except:
+            pass
 
     return f'table_inner and table_content have been extracted and saved'
 
@@ -318,7 +324,7 @@ def outline_detect_2(
 
         tablecorlist_txt = requests.post(f'http://{host}:{port}/detect', data=datas)
         tablecorlist = json.loads(tablecorlist_txt.text)
-        print("90 tablecorlist : ", tablecorlist)
+        # print("90 tablecorlist : ", tablecorlist)
 
         for tablecol in tablecorlist['tablecorlist']:
             table_oueline = crud.table.TableOutline(
@@ -366,33 +372,36 @@ def inner_detect_2(
 
     table_ids = crud.table.get_inner(paper_id)
     for table_id in table_ids:
-        meta = crud.table.get_and_set_table_meta(paper_id, table_id)
-        page = meta["page"]
-        pdfpath = meta["pdfpath"]
-        xmlpath = meta["xmlpath"]
-        structure = crud.table.detect_table_structure(paper_id, meta)
-        if crud.table.save_table_structure(paper_id, table_id, structure, 0):
-            raise TaskFailure(f"表格内结构保存错误 {paper_id}")
-        print(f'table_inner have been extracted and saved')
+        try:
+            meta = crud.table.get_and_set_table_meta(paper_id, table_id)
+            page = meta["page"]
+            pdfpath = meta["pdfpath"]
+            xmlpath = meta["xmlpath"]
+            structure = crud.table.detect_table_structure(paper_id, meta)
+            if crud.table.save_table_structure(paper_id, table_id, structure, 0):
+                raise TaskFailure(f"表格内结构保存错误 {paper_id}")
+            print(f'table_inner have been extracted and saved')
 
-        table = crud.table.get_table(paper_id, table_id)
-        areas = []
-        for row in structure.cells:
-            for col in row:
-                areas.append(
-                    get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
-                                  structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
-                )
-        texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
-        excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
+            table = crud.table.get_table(paper_id, table_id)
+            areas = []
+            for row in structure.cells:
+                for col in row:
+                    areas.append(
+                        get_trans_rec(structure.columns[col.column_begin], structure.rows[col.row_begin],
+                                      structure.columns[col.column_end], structure.rows[col.row_end], table.outline)
+                    )
+            texts = crud.table.get_area_text(paper_id, pdfpath, page, xmlpath, areas)
+            excel_path = crud.table.create_table_excel(paper_id, table_id, structure.cells, texts)
 
-        table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
-        table.content.text = texts
-        table.content.confirmed = False
-        print("save_table_content:")
-        if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
-            raise TaskFailure(f"表格内容保存错误 {paper_id}")
-        print(f'table_content have been extracted and saved')
+            table.content.excel_path = excel_path.replace("/tablefusoin-async/tablefusion_async", "/app/tablefusion")
+            table.content.text = texts
+            table.content.confirmed = False
+            print("save_table_content:")
+            if crud.table.save_table_content(paper_id, table_id, table.content, flag="new"):
+                raise TaskFailure(f"表格内容保存错误 {paper_id}")
+            print(f'table_content have been extracted and saved')
+        except:
+            pass
 
     return f'table_inner and table_content have been extracted and saved'
 
