@@ -14,7 +14,7 @@ from .utils import table_overlap, check_table_exists
 logger = logging.getLogger(__name__)
 
 
-@app.task(bind=True, base=BaseTask, time_limit=60 * 5)
+@app.task(bind=True, base=BaseTask, time_limit=60 * 20)
 def outline_detect(
         self,
         paper_id: str,
@@ -150,7 +150,7 @@ def inner_detect(
 #############################################################################
 
 
-@app.task(bind=True, base=BaseTask, time_limit=60 * 5, queue="table_fusion")
+@app.task(bind=True, base=BaseTask, time_limit=60 * 20, queue="table_fusion")
 def outline_detect_1(
         self,
         paper_id: str,
@@ -279,7 +279,7 @@ def inner_detect_1(
 
 #############################################################################
 
-@app.task(bind=True, base=BaseTask, time_limit=60 * 5, queue="test2")
+@app.task(bind=True, base=BaseTask, time_limit=60 * 20, queue="test2")
 def outline_detect_2(
         self,
         paper_id: str,
