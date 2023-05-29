@@ -559,6 +559,7 @@ def pdffigures2_image_3(
         reset: bool = False,
         **kwargs,
 ) -> str:
+    print("pdf_figures2_image :")
     DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
     existing_content = crud.pdf.get_pdf_content(paper_id,
                                                 crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, DB=DB).get(0, b'')
