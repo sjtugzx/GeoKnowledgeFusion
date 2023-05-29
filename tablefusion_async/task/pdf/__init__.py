@@ -612,7 +612,7 @@ def pdffigures2_image_3(
             result = 'pdffigures2-image parse failed, write empty json file'
             break
         F += 1
-        if F == 5:
+        if F == 3:
             break
 
     try:
