@@ -614,18 +614,19 @@ def pdffigures2_image_3(
         time.sleep(3)
 
     try:
-        id2content = {}
-        for idx, item in enumerate(data):
-            image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
-            id2content[idx + 1] = image_file_content
-            item['renderID'] = idx + 1
-            item.pop('renderImageBase64')
-            item.pop('renderURL')
-        print(f"{len(id2content)=}")
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
-                                  DB=DB)
-        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
+        if data:
+            id2content = {}
+            for idx, item in enumerate(data):
+                image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
+                id2content[idx + 1] = image_file_content
+                item['renderID'] = idx + 1
+                item.pop('renderImageBase64')
+                item.pop('renderURL')
+            print(f"{len(id2content)=}")
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                      DB=DB)
+            crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
