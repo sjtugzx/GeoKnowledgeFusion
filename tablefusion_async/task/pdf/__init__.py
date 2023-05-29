@@ -563,7 +563,6 @@ def pdffigures2_image_3(
     existing_content = crud.pdf.get_pdf_content(paper_id,
                                                 crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, DB=DB).get(0, b'')
     if not reset and existing_content and existing_content != b'[]':  # 确定已有结果且不是之前写入的empty result
-        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
         return 'Result exists. Task skip'
 
     pdf_bytes = crud.pdf.get_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDF, DB=DB).get(0, b'')
@@ -604,6 +603,7 @@ def pdffigures2_image_3(
             item['renderID'] = idx + 1
             item.pop('renderImageBase64')
             item.pop('renderURL')
+        print(f"{len(id2content)=}")
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
                                   DB=DB)
