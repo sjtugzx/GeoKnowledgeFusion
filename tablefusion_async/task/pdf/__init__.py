@@ -187,8 +187,12 @@ def pdffigures2_image(
     port = config.SERVICE_BACKEND_INFO["pdffigures2"]["port"]
     url = f'http://{host}:{port}/v1/parse/figure'
 
+    F = 0
+    data = []
+    result = "status_code != 200"
     while True:
         r = requests.post(url=url, files=files)
+        print(f"{r.status_code=}")
         if r.status_code == 200:  # success
             data = r.json()
             result = f'pdffigures2-image parse success, {len(data)} image have been extracted and saved'
@@ -198,20 +202,23 @@ def pdffigures2_image(
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
             break
+        if F == 5:
+            break
         time.sleep(3)
 
     try:
-        id2content = {}
-        for idx, item in enumerate(data):
-            image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
-            id2content[idx + 1] = image_file_content
-            item['renderID'] = idx + 1
-            item.pop('renderImageBase64')
-            item.pop('renderURL')
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
-                                  DB=DB)
-        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
+        if data:
+            id2content = {}
+            for idx, item in enumerate(data):
+                image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
+                id2content[idx + 1] = image_file_content
+                item['renderID'] = idx + 1
+                item.pop('renderImageBase64')
+                item.pop('renderURL')
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                      DB=DB)
+            crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
@@ -385,8 +392,12 @@ def pdffigures2_image_1(
     port = config.SERVICE_BACKEND_INFO["pdffigures2"]["port"]
     url = f'http://{host}:{port}/v1/parse/figure'
 
+    F = 0
+    data = []
+    result = "status_code != 200"
     while True:
         r = requests.post(url=url, files=files)
+        print(f"{r.status_code=}")
         if r.status_code == 200:  # success
             data = r.json()
             result = f'pdffigures2-image parse success, {len(data)} image have been extracted and saved'
@@ -396,20 +407,23 @@ def pdffigures2_image_1(
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
             break
+        if F == 5:
+            break
         time.sleep(3)
 
     try:
-        id2content = {}
-        for idx, item in enumerate(data):
-            image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
-            id2content[idx + 1] = image_file_content
-            item['renderID'] = idx + 1
-            item.pop('renderImageBase64')
-            item.pop('renderURL')
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
-                                  DB=DB)
-        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
+        if data:
+            id2content = {}
+            for idx, item in enumerate(data):
+                image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
+                id2content[idx + 1] = image_file_content
+                item['renderID'] = idx + 1
+                item.pop('renderImageBase64')
+                item.pop('renderURL')
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                      DB=DB)
+            crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
@@ -559,7 +573,6 @@ def pdffigures2_image_3(
         reset: bool = False,
         **kwargs,
 ) -> str:
-    print("pdf_figures2_image :")
     DB = kwargs["DB"] if kwargs and "DB" in kwargs else None
     existing_content = crud.pdf.get_pdf_content(paper_id,
                                                 crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, DB=DB).get(0, b'')
@@ -583,6 +596,9 @@ def pdffigures2_image_3(
     port = config.SERVICE_BACKEND_INFO["pdffigures2"]["port"]
     url = f'http://{host}:{port}/v1/parse/figure'
 
+    F = 0
+    data = []
+    result = "status_code != 200"
     while True:
         r = requests.post(url=url, files=files)
         print(f"{r.status_code=}")
@@ -595,21 +611,24 @@ def pdffigures2_image_3(
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
             break
+        if F == 5:
+            break
         time.sleep(3)
 
     try:
-        id2content = {}
-        for idx, item in enumerate(data):
-            image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
-            id2content[idx + 1] = image_file_content
-            item['renderID'] = idx + 1
-            item.pop('renderImageBase64')
-            item.pop('renderURL')
-        print(f"{len(id2content)=}")
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
-        crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
-                                  DB=DB)
-        crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
+        if data:
+            id2content = {}
+            for idx, item in enumerate(data):
+                image_file_content = base64.b64decode(item['renderImageBase64'].encode('ascii'))
+                id2content[idx + 1] = image_file_content
+                item['renderID'] = idx + 1
+                item.pop('renderImageBase64')
+                item.pop('renderURL')
+            print(f"{len(id2content)=}")
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
+            crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
+                                      DB=DB)
+            crud.paper_list.update_paper_list_status(paper_id, "processed", _type="figure_status")
     except Exception as e:
         logger.error(
             f"Could not write out result for {crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE.value} paper {paper_id}",
