@@ -113,10 +113,10 @@ SERVICE_BACKEND_INFO = {
         'port': 8074,
     },
     "pdffigures2": {
-        # 'host': '10.15.13.137',
-        # 'port': 91,
-        'host': '10.15.13.139',
-        'port': 8061,
+        'host': '10.15.13.137',
+        'port': 91,
+        # 'host': '10.15.13.139',
+        # 'port': 8061,
     },
     "table_outline": {
         'host': '10.15.13.137',
