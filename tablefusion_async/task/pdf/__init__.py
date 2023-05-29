@@ -585,6 +585,7 @@ def pdffigures2_image_3(
 
     while True:
         r = requests.post(url=url, files=files)
+        print(f"{r.status_code=}")
         if r.status_code == 200:  # success
             data = r.json()
             result = f'pdffigures2-image parse success, {len(data)} image have been extracted and saved'
