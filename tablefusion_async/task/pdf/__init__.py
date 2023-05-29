@@ -603,6 +603,7 @@ def pdffigures2_image_3(
             item['renderID'] = idx + 1
             item.pop('renderImageBase64')
             item.pop('renderURL')
+        print(f"{len(id2content)=}")
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE, id2content, DB=DB)
         crud.pdf.save_pdf_content(paper_id, crud.pdf.PdfContentTypeEnum.PDFFIGURES2_IMAGE_META, {0: json.dumps(data)},
                                   DB=DB)
