@@ -197,14 +197,14 @@ def pdffigures2_image(
             data = r.json()
             result = f'pdffigures2-image parse success, {len(data)} image have been extracted and saved'
             break
-        elif r.status_code != 500:  # not 503 means fatal error, do not re-try, return directly
+        elif r.status_code != 500:
             data = []
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
             break
+        F += 1
         if F == 5:
             break
-        time.sleep(3)
 
     try:
         if data:
@@ -407,9 +407,9 @@ def pdffigures2_image_1(
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
             break
+        F += 1
         if F == 5:
             break
-        time.sleep(3)
 
     try:
         if data:
@@ -611,9 +611,9 @@ def pdffigures2_image_3(
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
             break
+        F += 1
         if F == 5:
             break
-        time.sleep(3)
 
     try:
         if data:
