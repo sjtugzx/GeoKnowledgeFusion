@@ -606,7 +606,7 @@ def pdffigures2_image_3(
             data = r.json()
             result = f'pdffigures2-image parse success, {len(data)} image have been extracted and saved'
             break
-        elif r.status_code != 500:  # not 503 means fatal error, do not re-try, return directly
+        elif r.status_code != 500:  # 500 的情况表示，没有解析的图片，大概率为pdf中没有图片，或者
             data = []
             logger.error(f"PDF PdfFigures2 parse image failed: {pdffigures2_image} with http code {r.status_code}")
             result = 'pdffigures2-image parse failed, write empty json file'
