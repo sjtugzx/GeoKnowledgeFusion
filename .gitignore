@@ -146,3 +146,17 @@ cython_debug/
 
 
 example/
+
+subimage/configs
+subimage/outputs
+subimage/img
+subimage/logs
+subimage/model_data
+subimage/nets
+subimage/output
+subimage/VOCdevkit
+subimage/常见问题汇总.md
+tablefusion_async/config
+tablefusion_async/db
+tablefusion_async/common
+tablefusion_async/task

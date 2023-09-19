@@ -8,7 +8,7 @@ from kombu import Queue, Exchange
 # ==================================================================================================
 # Project
 
-PROJECT_NAME = 'tablefusion-async'
+PROJECT_NAME = 'GeoKnowledgeFusion'
 ENVIRONMENT_PREFIX = PROJECT_NAME.upper().replace('-', '_')
 
 MAJOR_VERSION = 0
